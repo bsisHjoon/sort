@@ -1,0 +1,475 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>정렬 실험실</title>
+<meta name="description" content="버블, 선택, 삽입, 퀵, 병합 정렬을 Python 코드와 함께 관찰하는 정렬 실험실. 직접 데이터를 바꾸고 한 단계씩 실행해 보세요.">
+<style>
+:root{--ink:#19312f;--muted:#647571;--teal:#117565;--teal-light:#e4f2ec;--line:#dce4de;--paper:#f5f6f0;--amber:#f4c665;--violet:#b7a1e4;--code:#142a2b;--mono:Consolas,'Cascadia Code',monospace;--sans:'Segoe UI','Malgun Gothic',sans-serif}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:14px}button,input,select{font:inherit}button{cursor:pointer}button,input,select{border:1px solid var(--line);border-radius:8px}button{background:#fff;color:var(--ink);font-weight:650;padding:10px 14px;transition:background .15s,transform .15s}button:hover:not(:disabled){background:#edf3ee}button:active:not(:disabled){transform:translateY(1px)}button:disabled{opacity:.36;cursor:default}button:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline:3px solid #54ad94;outline-offset:3px}input,select{background:#fff;color:var(--ink)}input[type=text]{padding:10px 13px;font-family:var(--mono);font-size:16px;min-width:0}input[type=range]{accent-color:var(--teal);cursor:pointer}button.primary{background:var(--teal);color:white;border-color:var(--teal)}button.primary:hover{background:#0e6355}.shell{max-width:1560px;margin:auto;padding:24px 32px 20px}.masthead{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:22px}.brand{display:flex;gap:14px;align-items:center}.brandmark{height:42px;width:44px;border:1px solid #aec8bb;border-radius:11px;display:flex;align-items:flex-end;justify-content:center;gap:4px;padding:10px;background:var(--teal-light)}.brandmark i{width:5px;background:var(--teal);border-radius:2px}.brandmark i:nth-child(1){height:8px}.brandmark i:nth-child(2){height:15px}.brandmark i:nth-child(3){height:22px}h1{font-size:26px;letter-spacing:-1px;margin:0;line-height:1.3}.eyebrow{font-size:10px;letter-spacing:2px;color:var(--teal);font-weight:800;margin-bottom:3px}.header-note{color:var(--muted);font-size:13px}.offline-dot{display:inline-block;width:7px;height:7px;background:#56a786;border-radius:50%;margin-right:6px}.tabs{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:14px}.tab{display:flex;align-items:center;gap:10px;padding:14px 17px;text-align:left;background:transparent;border-color:var(--line)}.tab .num{font-size:11px;color:#86928a;font-family:var(--mono)}.tab strong{font-size:15px}.tab .tab-arrow{margin-left:auto;opacity:0}.tab[aria-pressed=true]{background:var(--teal);color:#fff;border-color:var(--teal)}.tab[aria-pressed=true] .num{color:#b4d8c8}.tab[aria-pressed=true] .tab-arrow{opacity:1}.tab[aria-pressed=true]:hover{background:#0e6355}.data-panel{background:#fff;border:1px solid var(--line);border-radius:12px;padding:13px 16px;display:flex;gap:12px;align-items:center;flex-wrap:wrap}.data-label{font-weight:750;white-space:nowrap;font-size:13px}.data-form{display:flex;gap:8px;flex:1;min-width:240px}.data-form input{flex:1}.data-form button{white-space:nowrap}.presets{display:flex;gap:6px}.presets button{font-size:12px;font-weight:500;padding:9px 11px;background:var(--paper)}.input-help{font-size:11px;color:var(--muted);margin:7px 2px 0}.error{color:#b04430;font-weight:650;min-height:0}.error:not(:empty){margin-top:7px}.intro{display:flex;align-items:center;justify-content:space-between;gap:16px;margin:18px 0 12px}.intro h2{font-size:17px;margin:0 0 4px;letter-spacing:-.4px}.intro p{font-size:13px;color:var(--muted);margin:0}.intro .tags{display:flex;gap:7px;white-space:nowrap}.tag{border:1px solid var(--line);padding:5px 9px;border-radius:5px;font-size:11px;color:var(--muted)}.workspace{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;align-items:stretch;height:610px}.panel{background:white;border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;min-width:0}.panel-head{padding:14px 19px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:10px;min-height:52px}.panel-head h3{font-size:13px;margin:0}.panel-head .small{font-size:11px;color:var(--muted)}.live-label{display:inline-flex;gap:6px;align-items:center;color:var(--teal);font-size:11px;font-weight:700}.live-label:before{content:'';height:6px;width:6px;background:currentColor;border-radius:50%}.stage{padding:16px 19px 12px;flex-shrink:0}.stage-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:7px}.stage h3{font-size:19px;line-height:1.4;letter-spacing:-.5px;margin:0}.step-tag{font:11px var(--mono);white-space:nowrap;background:var(--teal-light);padding:5px 8px;border-radius:4px;color:var(--teal)}.stage p{font-size:13px;line-height:1.65;color:#536660;margin:0;min-height:42px}.diagram-scroll{overflow:auto;flex:1;min-height:0;padding:2px 19px 10px;scrollbar-width:thin}.callstack{display:flex;gap:5px;align-items:center;flex-wrap:wrap;margin:0 0 12px}.callstack:empty{display:none}.call-label{font-size:11px;color:var(--muted);margin-right:3px}.frame{font:11px var(--mono);padding:5px 7px;background:#f0f3ee;border-radius:4px;border:1px solid #e4e9e1}.frame.current{background:var(--teal-light);border-color:#a8cfb9;color:var(--teal);font-weight:bold}.frame-arrow{color:#99a59e}.variables{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;min-height:24px}.variable{font:12px var(--mono);background:#f1f4ef;border:1px solid #e2e9e0;border-radius:5px;padding:5px 8px}.variable b{color:var(--teal)}.variable-empty{font-size:11px;color:#8a9690;align-self:center}.array-row{margin-bottom:14px}.row-heading{display:flex;justify-content:space-between;gap:8px;align-items:center;margin-bottom:8px}.row-name{font:700 12px var(--mono);color:#526960}.row-note{font-size:10px;color:var(--muted)}.array-items{display:flex;gap:5px;min-height:42px;align-items:flex-end;padding:0 0 2px}.item{display:flex;flex:1;min-width:0;flex-direction:column;align-items:center;position:relative;gap:5px}.item .pointer{min-height:15px;font:700 10px var(--mono);color:var(--teal);white-space:nowrap;line-height:15px}.bar-shell{height:126px;display:flex;align-items:flex-end;width:100%}.bar{width:100%;min-width:0;border:1px solid #cdd9d2;background:#e8eeea;color:#304f43;display:flex;align-items:center;justify-content:center;border-radius:5px 5px 3px 3px;font:700 20px var(--mono);transition:height .2s,background .15s;position:relative}.item .idx{font:10px var(--mono);color:#84918a}.item.compared .bar{background:#fae1a7;border-color:#c99527;color:#674709}.item.changed .bar{background:#ddcff2;border-color:#9a77c9;color:#583580}.item.focus .bar{background:#d8eae1;border:2px solid #3d9073}.item.sorted .bar{background:#d9eddf;border-color:#77b38b;color:#236039}.item.consumed .bar{opacity:.35}.item.split{border-left:2px dashed #6d9f90;padding-left:7px;margin-left:4px}.compact .bar-shell{height:34px}.compact .bar{height:34px!important;font-size:14px;border-radius:5px}.compact .array-items{justify-content:flex-start}.compact .item{flex:0 1 43px;min-width:24px}.compact .pointer{min-height:0}.compact .idx{font-size:9px}.compact .row-heading{margin-bottom:5px}.compact .item:not(:has(.pointer:not(:empty))) .pointer{display:none}.empty-array{font:13px var(--mono);color:#8a9690;padding:9px 12px;border:1px dashed #cad6ce;border-radius:5px}.end-pointer{font:11px var(--mono);color:var(--teal);margin-top:5px}.legend{display:flex;gap:12px;flex-wrap:wrap;padding:8px 19px;font-size:10px;color:var(--muted);border-top:1px solid #eef1ea}.legend span{display:flex;gap:5px;align-items:center}.legend i{width:8px;height:8px;border-radius:2px}.legend .compare{background:#f0ca79}.legend .change{background:var(--violet)}.legend .sorted{background:#8dc89c}.legend .pivot{background:#6caa91}.controls{border-top:1px solid var(--line);background:#fcfdfa;padding:12px 16px 13px;flex-shrink:0}.timeline{display:flex;align-items:center;gap:10px;margin-bottom:10px}.timeline input{width:100%;height:5px;margin:5px 0}.timeline output{font:11px var(--mono);color:var(--muted);white-space:nowrap;min-width:66px;text-align:right}.control-buttons{display:flex;gap:6px;align-items:center}.control-buttons button{padding:9px 12px;font-size:12px;white-space:nowrap}.control-buttons .play{min-width:88px}.speed{margin-left:auto;display:flex;gap:5px;align-items:center;font-size:11px;color:var(--muted)}.speed select{padding:7px 4px;font-size:11px}.code-panel{background:var(--code);border-color:var(--code);color:#dce9e2}.code-panel .panel-head{border-color:#2a4140}.code-panel .panel-head h3{color:#dce9e2}.code-panel .small{color:#98b5a7}.file-tag{display:flex;gap:8px;align-items:center}.python-dot{width:8px;height:8px;background:#e2bf68;border-radius:50%}.code-scroll{overflow:auto;padding:12px 0;flex:1;scrollbar-width:thin;scrollbar-color:#4c6760 transparent;scroll-behavior:auto}.code-line{display:grid;grid-template-columns:34px minmax(0,1fr);gap:12px;position:relative;border-left:3px solid transparent;min-height:24px;padding:2px 16px 2px 1px;line-height:1.7}.line-no{color:#6b8b7d;font:11px/22px var(--mono);text-align:right;user-select:none}.line-text{white-space:pre-wrap;overflow-wrap:anywhere;font:12px/22px var(--mono);tab-size:4;color:#d9e6df}.code-line.active{background:#2b4b42;border-left-color:#b9d980}.code-line.active .line-no{color:#d1eab2}.code-line.active:after{content:'';position:absolute;left:6px;top:11px;border:3px solid transparent;border-left-color:#c4e5aa}.kw{color:#ddb0df}.fn{color:#91cdcf}.num-token{color:#efc979}.comment{color:#83a595}.code-line.active .comment{color:#b6cbbb}.code-footer{border-top:1px solid #2a4140;padding:10px 16px;color:#9fb7a9;font-size:10px;display:flex;justify-content:space-between;gap:8px}.line-badge{color:#d0e5a4;font-family:var(--mono)}.mobile-code{display:none}.sr-only{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}.array-items.dense .bar{font-size:14px}.array-items.dense .pointer{font-size:9px}.data-summary{font-family:var(--mono);font-size:10px;color:#719185}.completed .stage h3{color:var(--teal)}
+@media(min-width:851px){.workspace{height:clamp(490px,calc(100dvh - 365px),680px)}.line-text{font-size:13px}.legend{font-size:11px}}
+@media(min-width:1500px){.line-text{font-size:14px}}
+@media(max-height:850px) and (min-width:1001px){.shell{padding-top:18px}.masthead{margin-bottom:16px}.workspace{height:clamp(470px,calc(100dvh - 330px),550px)}.stage{padding-top:12px}.stage h3{font-size:17px}.bar-shell{height:105px}.intro{margin-top:12px}}
+@media(max-width:1100px){.shell{padding:18px}.tab{padding:12px}.tags{display:none!important}.control-buttons button{padding:9px}.speed>span{display:none}.legend{gap:8px}.line-text{font-size:11px}.code-line{gap:8px;grid-template-columns:28px minmax(0,1fr);padding-right:10px}.header-note{font-size:11px}}
+@media(max-width:850px){.shell{padding:16px 12px}.masthead{margin-bottom:18px}.header-note{display:none}.brandmark{width:37px;height:37px;padding:8px}.brand{gap:10px}h1{font-size:23px}.tab{justify-content:center;padding:12px 4px;gap:0}.tab .num,.tab-arrow{display:none}.tab strong{font-size:13px}.tabs{gap:5px}.data-panel{padding:12px;gap:9px}.data-label{width:100%;font-size:12px}.presets button{padding:7px 10px}.data-form{min-width:100%}.intro{margin:15px 2px 10px}.intro h2{font-size:16px}.intro p{font-size:12px}.workspace{grid-template-columns:1fr;height:auto;gap:12px}.visual-panel{height:515px}.code-panel{height:350px}.line-text{font-size:12px}.mobile-code{display:block;font:11px/1.5 var(--mono);color:var(--teal);background:#eef5ef;padding:6px 8px;border-radius:5px;margin-top:7px;max-height:45px;overflow:auto;white-space:pre-wrap}.stage p{min-height:0}.stage h3{font-size:17px}.stage{padding:12px 14px 8px}.diagram-scroll{padding-left:14px;padding-right:14px}.bar-shell{height:100px}.bar{font-size:18px}.legend{padding-left:14px}.array-items.dense{gap:3px}.array-items.dense .bar{font-size:10px}.array-items.dense .pointer{font-size:8px}.controls{padding:10px}.control-buttons button{font-size:11px;padding:9px 7px}.control-buttons .play{min-width:77px}.speed select{max-width:65px}.row-name{font-size:11px}.compact .item{flex-basis:34px}.compact .bar{font-size:12px}.data-summary{max-width:180px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}}
+.array-items.dense{min-width:560px}.array-items.dense .bar{font-size:13px}
+.presets{align-items:center;flex-wrap:wrap}.random-controls{display:flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:8px;padding:3px 4px 3px 9px;background:#f5f8f3}.random-controls label{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--muted);white-space:nowrap}.random-controls input{width:52px;padding:6px 4px;font:13px var(--mono)}.random-controls button{border-color:#bfd2c4;background:#e4f2ec;color:var(--teal)}
+.item.min-candidate .bar{background:#dceaff;border:2px solid #477bc2;color:#214f8e}.item.min-candidate.compared .bar{box-shadow:0 0 0 3px var(--amber)}.item.min-candidate.changed .bar{box-shadow:0 0 0 3px var(--violet)}.pointer .min-label{color:#245ca4;background:#e5efff;border-radius:3px;padding:1px 3px}.variable.minimum-variable{background:#e5efff;border-color:#acc6e9}.variable.minimum-variable b{color:#245ca4}.legend .minimum{background:#477bc2}.legend [hidden]{display:none}
+.callstack{max-height:88px;overflow:auto;flex-shrink:0;align-content:flex-start;scrollbar-width:thin}.frame{max-width:100%;overflow-wrap:anywhere;line-height:1.5}.frame.current{border-left:3px solid var(--teal)}
+.workspace.recursive-mode{min-height:610px}.recursive-mode .array-row.compact{margin-bottom:8px}.recursive-mode .compact .item{gap:2px}
+@media(max-width:850px){.random-controls{gap:4px;padding:3px 4px 3px 6px}.random-controls label{font-size:10px}.random-controls input{width:43px;padding:5px 2px}.random-controls button{padding:7px 8px}.presets{gap:5px}.callstack{max-height:82px}}
+@media(max-width:850px){.workspace.recursive-mode .visual-panel{height:640px}}
+/* Larger classroom text and index-aligned loop pointers. */
+body{font-size:15px}.tab strong{font-size:16px}.data-label,.presets button{font-size:14px}.input-help,.row-note,.step-tag,.panel-head .small,.legend,.code-footer{font-size:12px}.intro p,.stage p{font-size:15px}.panel-head h3{font-size:15px}.variable,.row-name{font-size:14px}.frame{font-size:12px}.line-text{font-size:15px;line-height:24px}.line-no{font-size:12px;line-height:24px}.bar{font-size:22px}.compact .bar{font-size:16px}.item .idx,.compact .idx{font-size:12px;color:#65766b}.item .pointer{font-size:13px;line-height:18px;min-height:18px}.linear-row .pointer-bottom{min-height:22px;line-height:22px;font-size:14px}.pointer-bottom:not(:empty):before{content:'↑ ';color:#78988b}.array-items.dense{min-width:620px}.array-items.dense .bar{font-size:14px}.array-items.dense .pointer{font-size:12px}.control-buttons button{font-size:13px}.speed select{font-size:12px}.workspace{min-height:530px}.workspace.recursive-mode{min-height:670px}.workspace .panel-head{flex-shrink:0}
+.intro-actions{display:flex;align-items:center;gap:10px}.trail-link{font-size:13px;color:var(--teal);white-space:nowrap;background:#e4f2ec;border-color:#bdd4c5}.trail-link[hidden],.footprints[hidden]{display:none}.footprints{margin-top:18px;background:#fff;border:1px solid var(--line);border-radius:14px;scroll-margin-top:16px;overflow:hidden}.footprints-head{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:18px 20px;border-bottom:1px solid var(--line)}.footprints h2{font-size:19px;margin:0 0 5px}.footprints-head p{font-size:13px;color:var(--muted);margin:0;line-height:1.6}.footprints-options{display:flex;align-items:center;gap:15px;white-space:nowrap;font-size:12px;color:var(--muted)}.footprints-options label{display:flex;align-items:center;gap:6px;cursor:pointer;color:var(--ink)}.footprints-options input{accent-color:var(--teal);width:16px;height:16px}.footprint-scroll{max-height:420px;overflow:auto;padding:12px 20px;scrollbar-width:thin}.footprint-list{margin:0;padding:0;list-style:none}.footprint-entry{margin-left:calc(var(--nest)*18px);border-left:2px solid #dce7df;padding:0 0 10px 12px}.footprint-entry[hidden]{display:none}.footprint-entry button{width:100%;display:flex;align-items:flex-start;gap:12px;text-align:left;padding:13px 15px;border-radius:8px;font-weight:400;background:#fafbf8}.footprint-number{font:12px var(--mono);background:#edf1eb;color:#718276;padding:5px;border-radius:5px;flex-shrink:0}.footprint-content{flex:1;min-width:0}.footprint-heading{display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:7px}.footprint-heading code{font:13px/1.6 var(--mono);overflow-wrap:anywhere;color:#547468}.footprint-kind{font-size:12px;font-weight:750;border-radius:4px;padding:3px 6px;color:#34685b;background:#e3efe8}.footprint-kind.split,.footprint-kind.pivot{background:#fff0cb;color:#866315}.footprint-kind.merge{background:#ece4f6;color:#6a4790}.footprint-kind.return,.footprint-kind.done{background:#dceee0;color:#2d693e}.footprint-summary{display:block;font-size:14px;line-height:1.7;overflow-wrap:anywhere}.footprint-parent{display:block;color:#708378;font:12px/1.6 var(--mono);margin-top:4px;overflow-wrap:anywhere}.footprint-step{font-size:11px;color:var(--muted);flex-shrink:0;padding-top:5px}.footprint-entry.current{border-color:var(--teal)}.footprint-entry.current button{background:#eaf5ee;border-color:#68aa88}.footprint-entry.current .footprint-number{background:var(--teal);color:white}.footprint-entry.current .footprint-step:before{content:'현재 · ';color:var(--teal);font-weight:700}.footprint-entry.future button{background:white;color:#77867d;border-style:dashed}.footprint-entry.future .footprint-step:before{content:'예정 · '}.footprint-empty{padding:20px 0;color:var(--muted);font-size:14px;text-align:center;line-height:1.7}.footprint-empty[hidden]{display:none}
+@media(max-width:1100px){.line-text{font-size:14px}.footprints-head{align-items:flex-start}.footprints-options{flex-direction:column;align-items:flex-end;gap:7px}}
+@media(max-width:850px){.tab strong{font-size:14px}.presets button{font-size:12px}.intro{align-items:flex-start}.intro-actions{flex-shrink:0}.trail-link{font-size:12px;padding:8px}.intro p{font-size:13px}.stage p{font-size:14px}.line-text{font-size:13px;line-height:23px}.mobile-code{font-size:13px;max-height:54px}.visual-panel{height:560px}.workspace{min-height:0}.workspace.recursive-mode .visual-panel{height:700px}.compact .bar{font-size:15px}.control-buttons button{font-size:12px}.footprints-head{padding:15px;flex-wrap:wrap}.footprints-options{flex-direction:row;width:100%;justify-content:space-between}.footprint-scroll{padding:12px;max-height:470px}.footprint-entry{margin-left:calc(var(--nest)*8px);padding-left:7px}.footprint-entry button{gap:7px;padding:10px 8px;position:relative}.footprint-heading code{font-size:12px}.footprint-summary{font-size:13px}.footprint-step{display:none}.footprint-parent{font-size:11px}.footprint-number{font-size:11px}.item .pointer{font-size:12px}.linear-row .pointer-bottom{font-size:13px}}
+/* Each milestone keeps its own array snapshot, including future preview cards. */
+.footprint-picture{display:block;margin:10px 0 8px;padding:12px;background:#fff;border:1px solid #e0e8df;border-radius:8px}
+.trail-groups{display:flex;flex-wrap:wrap;align-items:flex-start;gap:12px 20px}
+.trail-group{display:flex;flex-direction:column;gap:6px;max-width:100%;min-width:0}
+.trail-label{font:12px/1.5 var(--mono);color:#536b5e;overflow-wrap:anywhere}
+.trail-cells{display:flex;flex-wrap:wrap;gap:4px;align-items:center;max-width:100%}
+.trail-cell{display:inline-flex;align-items:center;justify-content:center;min-width:36px;height:36px;padding:0 7px;background:#eef2ee;border:1px solid #cbd8cf;border-radius:5px;font:600 15px/1 var(--mono);color:#304a3b}
+.trail-cell.left{background:#eaf1fa;border-color:#b9cde6;color:#315b89}
+.trail-cell.right{background:#f3eef9;border-color:#d4c5e4;color:#69527d}
+.trail-cell.sorted{background:#d9eddf;border-color:#9fc9aa;color:#245d36}
+.trail-cell.pivot{background:#ffe7a9;border-color:#c49a32;color:#714f00}
+.trail-cell.added{background:#e5d6f7;border:2px solid #9972c1;color:#59327d}
+.trail-empty{display:inline-flex;align-items:center;min-height:36px;padding:5px 9px;border:1px dashed #bacabd;border-radius:5px;color:#708075;font:12px var(--mono)}
+.trail-connector{display:flex;align-items:center;gap:7px;margin:8px 0;font-size:12px;color:#6c7f71}
+.trail-connector>span{font-size:19px;color:#648e76}
+.trail-legend{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:8px;font-size:12px;color:#607366}
+.trail-legend>span{display:inline-flex;align-items:center;gap:5px}
+.trail-legend i{width:10px;height:10px;border:1px solid #a8cbb0;border-radius:2px;background:#d9eddf}
+.trail-legend .pivot{background:#ffe7a9;border-color:#c49a32}.trail-legend .added{background:#e5d6f7;border-color:#9972c1}
+.footprint-scroll{max-height:560px}
+@media(max-width:850px){.footprint-picture{padding:9px;margin-top:8px}.trail-groups{gap:10px 14px}.trail-cell{min-width:31px;height:33px;font-size:14px;padding:0 5px}.trail-label{font-size:11px}.trail-legend{font-size:11px;gap:6px 10px}.footprint-scroll{max-height:560px}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<main class="shell">
+ <header class="masthead"><div class="brand"><div class="brandmark" aria-hidden="true"><i></i><i></i><i></i></div><div><h1>정렬 실험실</h1></div></div></header>
+ <nav class="tabs" aria-label="정렬 알고리즘 선택">
+  <button class="tab" data-algorithm="bubble" aria-pressed="true"><span class="num">01</span><strong>버블 정렬</strong><span class="tab-arrow">↗</span></button>
+  <button class="tab" data-algorithm="selection" aria-pressed="false"><span class="num">02</span><strong>선택 정렬</strong><span class="tab-arrow">↗</span></button>
+  <button class="tab" data-algorithm="insertion" aria-pressed="false"><span class="num">03</span><strong>삽입 정렬</strong><span class="tab-arrow">↗</span></button>
+  <button class="tab" data-algorithm="quick" aria-pressed="false"><span class="num">04</span><strong>퀵 정렬</strong><span class="tab-arrow">↗</span></button>
+  <button class="tab" data-algorithm="merge" aria-pressed="false"><span class="num">05</span><strong>병합 정렬</strong><span class="tab-arrow">↗</span></button>
+ </nav>
+ <section aria-label="실험 데이터">
+  <div class="data-panel"><label class="data-label" for="data-input">실험할 데이터</label><form class="data-form" id="data-form"><input id="data-input" type="text" value="5, 3, 8, 1, 9, 2" spellcheck="false" autocomplete="off" aria-describedby="input-help input-error"><button type="submit" class="primary">적용 ↵</button></form><div class="presets"><button id="default-data" type="button">기본 데이터</button><div class="random-controls"><label for="random-count">개수 <input id="random-count" type="number" min="1" max="16" step="1" value="6" aria-label="무작위 데이터 개수" aria-describedby="input-help input-error"></label><button id="random-data" type="button">무작위</button></div><button id="reverse-data" type="button">역순</button></div></div>
+  <p id="input-help" class="input-help">쉼표 또는 공백으로 구분 · 정수 1~16개 · −999~999 · 중복 값도 가능</p><div id="input-error" class="error" role="alert"></div>
+ </section>
+ <div class="intro"><div><h2 id="algorithm-name">버블 정렬</h2><p id="algorithm-summary"></p></div><div class="intro-actions"><button id="show-footprints" class="trail-link" type="button" hidden>정렬 발자취 보기 ↓</button><div class="tags"><span class="tag" id="algorithm-cost"></span><span class="tag" id="algorithm-memory"></span></div></div></div>
+ <div class="workspace">
+  <section class="panel visual-panel" aria-label="정렬 과정 시각화">
+   <div class="panel-head"><h3>배열에서 확인하기</h3><span id="comparison-count" class="small" title="배열 값끼리 비교한 횟수입니다. 반복 조건의 인덱스 비교는 제외합니다.">값 비교 0회</span></div>
+   <div class="stage"><div class="stage-top"><h3 id="stage-title">데이터 준비</h3><span id="stage-line" class="step-tag"></span></div><p id="stage-detail"></p><code id="mobile-code" class="mobile-code"></code></div>
+   <div id="callstack" class="callstack" style="margin-left:19px;margin-right:19px" aria-label="현재 재귀 호출 경로"></div><div class="diagram-scroll" id="diagram-scroll"><div id="variables" class="variables" aria-label="현재 변수 값"></div><div id="arrays"></div></div>
+   <div class="legend"><span><i class="compare"></i>비교 중</span><span><i class="change"></i>교환 / 추가</span><span><i class="sorted"></i>정렬된 구간</span><span><i class="pivot"></i>기준값</span><span id="minimum-legend" hidden><i class="minimum"></i>min_idx 위치</span></div>
+   <div class="controls"><div class="timeline"><label class="sr-only" for="step-range">실행 단계 이동</label><input id="step-range" type="range" min="0" max="1" value="0"><output id="step-counter" for="step-range">1 / 1</output></div><div class="control-buttons"><button id="reset" title="처음으로">↺ 처음</button><button id="previous" title="이전 단계 (←)">← 이전</button><button id="play" class="primary play">▶ 자동 재생</button><button id="next" title="다음 단계 (→)">다음 →</button><label class="speed"><span>속도</span><select id="speed" aria-label="재생 속도"><option value="1800">느리게</option><option value="1000" selected>보통</option><option value="450">빠르게</option></select></label></div></div>
+  </section>
+  <section class="panel code-panel" aria-label="Python 코드와 현재 실행 줄">
+   <div class="panel-head"><h3 class="file-tag"><span class="python-dot"></span><span id="filename">bubble_sort.py</span></h3><span class="small">Python · 실행 줄 자동 강조</span></div>
+   <div id="code-scroll" class="code-scroll" tabindex="0" aria-label="전체 Python 코드"><div id="code-lines"></div></div>
+   <div class="code-footer"><span>강조한 줄의 실행 결과를 왼쪽에서 확인하세요.</span><span id="code-line-label" class="line-badge"></span></div>
+  </section>
+ </div>
+ <section class="footprints" id="footprints" aria-labelledby="footprints-title" hidden>
+  <div class="footprints-head"><div><h2 id="footprints-title" tabindex="-1">정렬 발자취</h2><p>배열 그림으로 나누고 합치는 과정을 따라가 보세요. 항목을 누르면 그때의 배열과 코드로 이동합니다.</p><div class="trail-legend" aria-label="발자취 그림 색상 안내"><span><i class="pivot"></i>기준값 pivot</span><span><i class="added"></i>새로 붙인 값</span><span><i></i>정렬된 배열</span></div></div><div class="footprints-options"><span id="footprint-count"></span><label><input type="checkbox" id="footprint-all">전체 과정 보기</label></div></div>
+  <div id="footprint-scroll" class="footprint-scroll"><p id="footprint-empty" class="footprint-empty">다음 단계를 누르면 호출과 결과가 차례로 쌓입니다.<br>‘전체 과정 보기’를 켜면 끝까지 미리 살펴볼 수 있어요.</p><ol class="footprint-list" id="footprint-list" aria-label="정렬 발자취 목록"></ol></div>
+ </section>
+ <p class="sr-only" aria-live="polite" id="announcement"></p>
+</main>
+<script>
+'use strict';
+const DEFAULT_DATA = [5, 3, 8, 1, 9, 2];
+const ALGORITHMS = {
+  bubble: {name:'버블 정렬', en:'BUBBLE SORT', summary:'이웃한 두 값을 비교해 큰 값을 뒤로 보냅니다.', note:'한 바퀴가 끝나면 가장 큰 값 하나가 뒤쪽에 확정됩니다. 주신 코드처럼 중간에 멈추지 않고 n−1바퀴를 돕니다.', cost:'O(n²)', memory:'제자리 교환'},
+  selection: {name:'선택 정렬', en:'SELECTION SORT', summary:'남은 값 중 가장 작은 값을 찾아 앞에 놓습니다.', note:'min_idx는 값이 아니라 가장 작은 값의 위치입니다. 뒤쪽을 모두 살펴본 다음 한 번 교환합니다.', cost:'O(n²)', memory:'제자리 교환'},
+  insertion: {name:'삽입 정렬', en:'INSERTION SORT', summary:'새 값을 왼쪽의 정렬된 구간에 끼워 넣습니다.', note:'주신 코드는 왼쪽 값이 더 크면 이웃한 두 값을 교환합니다. 같은 값이면 교환하지 않고 멈춥니다.', cost:'평균 O(n²)', memory:'제자리 교환'},
+  quick: {name:'퀵 정렬', en:'QUICK SORT', summary:'첫 값을 기준으로 나누고, 양쪽을 다시 정렬합니다.', note:'pivot은 arr[0]입니다. 작은 값은 left, 크거나 같은 값은 right로 보냅니다. 새 리스트를 만드는 코드이므로 원본 arr를 교환하지 않습니다.', cost:'평균 O(n log n)', memory:'새 리스트 · 재귀'},
+  merge: {name:'병합 정렬', en:'MERGE SORT', summary:'반씩 나눈 뒤, 작은 값부터 골라 다시 합칩니다.', note:'merge_sort는 나누고, merge는 합칩니다. 두 값이 같으면 <= 조건에 따라 왼쪽 값을 먼저 가져옵니다.', cost:'O(n log n)', memory:'새 리스트 · 재귀'}
+};
+const SOURCES = {
+ bubble:[
+ ['def','def bubble_sort(arr):'],['n','    n = len(arr)'],['outer','    for i in range(n - 1):                 # n-1 바퀴'],['inner','        for j in range(n - 1 - i):         # 확정된 뒤쪽은 빼고'],['compare','            if arr[j] > arr[j + 1]:        # 왼쪽이 더 크면'],['swap','                arr[j], arr[j + 1] = arr[j + 1], arr[j]    # 바꾼다'],['return','    return arr']
+ ],
+ selection:[
+ ['def','def selection_sort(arr):'],['n','    n = len(arr)'],['outer','    for i in range(n - 1):'],['min','        min_idx = i                        # 일단 i번이 제일 작다고 치고'],['inner','        for j in range(i + 1, n):          # 뒤를 다 훑어서'],['compare','            if arr[j] < arr[min_idx]:      # 더 작은 게 있으면'],['update','                min_idx = j                # 작은 것의 위치를 기억하고'],['swap','        arr[i], arr[min_idx] = arr[min_idx], arr[i]    # 맨 앞과 바꾼다'],['return','    return arr']
+ ],
+ insertion:[
+ ['def','def insertion_sort(arr):'],['outer','    for i in range(1, len(arr)):           # 1번부터 한 개씩 꺼내서'],['j','        j = i'],['compare','        while j > 0 and arr[j - 1] > arr[j]:   # 왼쪽이 더 크면'],['swap','            arr[j - 1], arr[j] = arr[j], arr[j - 1]    # 한 칸 앞으로'],['decrement','            j -= 1'],['return','    return arr']
+ ],
+ quick:[
+ ['def','def quick_sort(arr):'],['base','    if len(arr) <= 1:                              # 멈추는 조건'],['baseReturn','        return arr'],['',''],['pivot','    pivot = arr[0]'],['left','    left = []'],['right','    right = []'],['loop','    for x in arr[1:]:'],['compare','        if x < pivot:'],['appendLeft','            left.append(x)'],['else','        else:'],['appendRight','            right.append(x)'],['',''],['return','    return quick_sort(left) + [pivot] + quick_sort(right)']
+ ],
+ merge:[
+ ['mdef','def merge(left, right):'],['result','    result = []'],['i','    i = 0                           # 왼쪽에서 볼 위치'],['j','    j = 0                           # 오른쪽에서 볼 위치'],['',''],['while','    while i < len(left) and j < len(right):'],['compare','        if left[i] <= right[j]:     # 왼쪽이 작거나 같으면'],['appendLeft','            result.append(left[i])'],['incI','            i += 1'],['else','        else:                       # 오른쪽이 작으면'],['appendRight','            result.append(right[j])'],['incJ','            j += 1'],['','    #'],['restLeft','    result += left[i:]              # 남은 것 붙이기'],['restRight','    result += right[j:]'],['',''],['mreturn','    return result'],['',''],['def','def merge_sort(arr):'],['base','    if len(arr) <= 1:                   # 멈추는 조건'],['baseReturn','        return arr'],['',''],['mid','    mid = len(arr) // 2'],['left','    left  = merge_sort(arr[:mid])       # 왼쪽 절반 정렬'],['right','    right = merge_sort(arr[mid:])       # 오른쪽 절반 정렬'],['',''],['return','    return merge(left, right)           # 합치기']
+ ]
+};
+function sourceFor(id, data) {
+ return [...SOURCES[id],['',''],['data',`data = [${data.join(', ')}]`],['print',`print(${id === 'merge' ? 'merge' : id}_sort(data))`]];
+}
+function parseData(text) {
+ let s=text.trim();
+ if (s.startsWith('[') && s.endsWith(']')) s=s.slice(1,-1).trim();
+ if (!s) throw new Error('숫자를 1개 이상 입력해 주세요.');
+ if (/(^|,)\s*(,|$)/.test(s)) throw new Error('쉼표 사이에 숫자를 입력해 주세요.');
+ const tokens=s.split(/[\s,]+/);
+ if (tokens.length>16) throw new Error('한 번에 최대 16개까지 비교할 수 있어요.');
+ if(tokens.some(v=>!/^[-+]?\d+$/.test(v))) throw new Error('정수만 입력해 주세요. 쉼표나 공백으로 구분할 수 있어요.');
+ const values=tokens.map(Number);
+ if(values.some(v=>!Number.isSafeInteger(v)||Math.abs(v)>999)) throw new Error('숫자는 −999부터 999까지 입력해 주세요.');
+ return values;
+}
+function buildTrace(id, input) {
+ const events=[], stack=[]; let comparisons=0, swaps=0, nextFrame=0;
+ const code=sourceFor(id,input), lines=Object.fromEntries(code.map(([tag],i)=>[tag,i+1]));
+ const list=(name,values,extra={})=>({name,values:[...values],...extra});
+ const snapshot=(tag,title,detail,rows,vars={},extra={})=>{
+   if (!lines[tag]) throw new Error(`Unknown line: ${id}/${tag}`);
+   events.push(JSON.parse(JSON.stringify({line:lines[tag],tag,title,detail,rows,vars,comparisons,swaps,stack, ...extra})));
+ };
+ const enter=(fn,...args)=>{stack.push({id:++nextFrame,fn,args:args.map(values=>[...values])});};
+ const range=(a,b)=>Array.from({length:Math.max(0,b-a)},(_,i)=>a+i);
+ snapshot('data','데이터 준비','입력한 순서 그대로 시작합니다. 다음 단계를 눌러 코드를 실행해 보세요.',[list('data',input)]);
+ snapshot('print','정렬 함수 호출',`${id}_sort(data)를 먼저 실행한 뒤 반환값을 출력합니다.`,[list('data',input)]);
+ let result;
+ if(['bubble','selection','insertion'].includes(id)) {
+   const arr=[...input], n=arr.length; let i,j,min_idx; let sorted=[];
+   enter(`${id}_sort`,arr);
+   const emit=(tag,title,detail,extra={})=>{
+     const vars={}; if(id!=='insertion' && tag!=='def')vars.n=n;
+     if(i!==undefined && id!=='bubble')vars.i=i; if(j!==undefined)vars.j=j; if(min_idx!==undefined)vars.min_idx=min_idx;
+     snapshot(tag,title,detail,[list('arr',arr,{sorted,pointers:{...(i!==undefined && id!=='bubble'?{i}:{}),...(j!==undefined?{j}:{}),...(min_idx!==undefined?{min_idx}: {})},...extra})],vars);
+   };
+   emit('def','함수 안으로 들어가기','arr는 정렬할 리스트입니다. 위치(인덱스)는 0부터 셉니다.');
+   if(id!=='insertion')emit('n','배열의 길이 저장',`n = ${n}. 모두 ${n}개의 값을 정렬합니다.`);
+   if(id==='bubble') {
+     for(let a=0;a<n-1;a++) {
+       i=a; emit('outer',`${i+1}번째 바퀴 시작`,`이번에는 인덱스 ${n-1-i}까지 큰 값을 보냅니다.`);
+       for(let b=0;b<n-1-i;b++) {
+         j=b; emit('inner','이웃한 두 위치 선택',`j = ${j}. arr[${j}]와 arr[${j+1}]을 비교할 차례입니다.`,{compared:[j,j+1]});
+         comparisons++; const yes=arr[j]>arr[j+1];
+         emit('compare',yes?'왼쪽 값이 더 큽니다':'현재 순서를 유지합니다',`${arr[j]} > ${arr[j+1]} → ${yes?'참. 다음 줄에서 두 값을 교환합니다.':'거짓. 교환 줄을 건너뜁니다.'}`,{compared:[j,j+1]});
+         if(yes) {const before=[arr[j],arr[j+1]]; [arr[j],arr[j+1]]=[arr[j+1],arr[j]]; swaps++; emit('swap','두 값 교환',`${before[0]}와 ${before[1]}의 자리를 바꿨습니다.`,{changed:[j,j+1]});}
+       }
+       sorted=range(n-1-i,n); emit('inner','이번 바퀴 끝',`안쪽 반복이 끝났습니다. 인덱스 ${n-1-i}의 값 ${arr[n-1-i]}은 최종 위치에 도착했습니다.`);
+     }
+     emit('outer','모든 바퀴 끝','바깥 반복을 마쳤습니다. 정렬된 배열을 반환합니다.');
+   } else if(id==='selection') {
+     for(let a=0;a<n-1;a++) {
+       i=a; emit('outer',`인덱스 ${i}에 놓을 값 찾기`,`i = ${i}. 아직 정렬하지 않은 구간에서 최솟값을 찾습니다.`);
+       min_idx=i; emit('min','최솟값 후보 정하기',`min_idx = ${i}. 현재 후보는 ${arr[min_idx]}입니다.`,{focus:[min_idx]});
+       for(let b=i+1;b<n;b++) {
+         j=b; emit('inner','다음 후보 살펴보기',`j = ${j}. 현재 최솟값 후보와 비교합니다.`,{compared:[j,min_idx]});
+         comparisons++; const yes=arr[j]<arr[min_idx];
+         emit('compare',yes?'더 작은 값 발견':'최솟값 후보 유지',`${arr[j]} < ${arr[min_idx]} → ${yes?'참. min_idx를 바꿉니다.':'거짓. 현재 후보를 유지합니다.'}`,{compared:[j,min_idx]});
+         if(yes){min_idx=j;emit('update','최솟값 위치 갱신',`min_idx = ${j}. 새 최솟값 후보는 ${arr[j]}입니다.`,{focus:[min_idx]});}
+       }
+       emit('inner','남은 구간 탐색 완료',`이 구간의 최솟값은 arr[${min_idx}] = ${arr[min_idx]}입니다.`,{focus:[min_idx]});
+       [arr[i],arr[min_idx]]=[arr[min_idx],arr[i]];swaps++;sorted=range(0,i+1);
+       emit('swap',i===min_idx?'같은 자리와 교환':'최솟값을 앞에 놓기',i===min_idx?`i와 min_idx가 모두 ${i}이므로 교환문을 실행해도 배열은 그대로입니다.`:`arr[${i}]와 arr[${min_idx}]를 교환했습니다. 인덱스 ${i}까지 최종 위치가 확정되었습니다.`,{changed:[i,min_idx]});
+     }
+     emit('outer','모든 위치 선택 완료','바깥 반복을 마쳤습니다. 마지막 값도 알맞은 위치에 있습니다.');
+   } else {
+     sorted=n?[0]:[];
+     for(let a=1;a<n;a++) {
+       i=a;sorted=range(0,i);emit('outer','정렬된 앞부분에 값 넣기',`i = ${i}. ${arr[i]}을 왼쪽 구간 안의 알맞은 자리로 옮깁니다.`,{focus:[i],sortedLabel:'앞부분 정렬됨'});
+       j=i;emit('j','이동 위치 설정',`j = i = ${j}. 이 위치부터 왼쪽으로 이동합니다.`,{focus:[j],sortedLabel:'앞부분 정렬됨'});
+       sorted=[];
+       while(true){
+         const bound=j>0; if(bound)comparisons++;
+         const yes=bound && arr[j-1]>arr[j];
+         emit('compare',yes?'왼쪽 값이 더 큽니다':'이동을 멈춥니다',!bound?'j = 0이므로 j > 0이 거짓입니다. and 뒤의 값 비교는 실행하지 않습니다.':`${arr[j-1]} > ${arr[j]} → ${yes?'참. 두 값을 바꿉니다.':'거짓. 들어갈 자리를 찾았습니다.'}`,{compared:bound?[j-1,j]:[],focus:bound?[]:[j]});
+         if(!yes)break;
+         [arr[j-1],arr[j]]=[arr[j],arr[j-1]];swaps++;emit('swap','한 칸 앞으로 교환',`인덱스 ${j-1}과 ${j}의 값을 교환했습니다. j는 아직 ${j}입니다.`,{changed:[j-1,j]});
+         j--;emit('decrement','이동 위치도 한 칸 앞으로',`j = ${j}. 다시 왼쪽 값과 비교할 준비를 합니다.`,{focus:[j]});
+       }
+       sorted=range(0,i+1);
+     }
+     emit('outer','앞부분 정렬 완료','바깥 반복을 마쳤습니다. 이제 전체 배열이 정렬되어 있습니다.');
+   }
+   sorted=range(0,n);emit('return','정렬된 배열 반환',`return arr → [${arr.join(', ')}]`);result=arr;stack.pop();
+ } else if(id==='quick') {
+   function quick(arr){
+     enter('quick_sort',arr);let pivot,left,right,x,k,leftResult,rightResult,output;
+     const emit=(tag,title,detail,extra={})=>{
+       const rows=[list('arr',arr,{compact:true,focus:pivot===undefined?[]:[0],compared:k===undefined?[]:[k],pointers:{...(pivot!==undefined?{pivot:0}:{}),...(k!==undefined?{x:k}:{})},...extra})];
+       if(left!==undefined)rows.push(list('left',left,{compact:true,tone:'left',changed:tag==='appendLeft'?[left.length-1]:[]}));
+       if(right!==undefined)rows.push(list('right',right,{compact:true,tone:'right',changed:tag==='appendRight'?[right.length-1]:[]}));
+       if(leftResult!==undefined)rows.push(list('quick_sort(left)',leftResult,{compact:true,sorted:range(0,leftResult.length)}));
+       if(rightResult!==undefined)rows.push(list('quick_sort(right)',rightResult,{compact:true,sorted:range(0,rightResult.length)}));
+       if(output!==undefined)rows.push(list('반환값',output,{compact:true,sorted:range(0,output.length)}));
+       snapshot(tag,title,detail,rows,{...(pivot!==undefined?{pivot}:{}),...(x!==undefined?{x}:{})});
+     };
+     emit('def','퀵 정렬 호출',`현재 호출의 arr = [${arr.join(', ')}]. 각 호출은 자기 배열을 정렬합니다.`);
+     emit('base','멈추는 조건 확인',`len(arr) = ${arr.length}. ${arr.length} <= 1 → ${arr.length<=1?'참':'거짓'}.`);
+     if(arr.length<=1){output=arr;emit('baseReturn','더 나눌 필요가 없습니다','원소가 0개 또는 1개이므로 그대로 반환합니다.');stack.pop();return [...arr];}
+     pivot=arr[0];emit('pivot','첫 값을 기준으로 선택',`pivot = arr[0] = ${pivot}. 이번 호출의 기준값입니다.`);
+     left=[];emit('left','작은 값들을 담을 리스트','left = []로 시작합니다.');
+     right=[];emit('right','크거나 같은 값들을 담을 리스트','right = []로 시작합니다.');
+     for(k=1;k<arr.length;k++){
+       x=arr[k];emit('loop','다음 값 꺼내기',`arr[1:]에서 x = ${x}를 꺼냈습니다. x는 인덱스가 아니라 값입니다.`);
+       comparisons++;const yes=x<pivot;emit('compare','기준값과 비교',`${x} < ${pivot} → ${yes?'참. left에 넣습니다.':'거짓. right에 넣습니다.'}`);
+       if(yes){left.push(x);emit('appendLeft','left에 추가',`${x}를 left의 끝에 추가했습니다.`);}
+       else {emit('else','크거나 같은 경우',`${x}는 기준값 ${pivot}보다 작지 않습니다.`);right.push(x);emit('appendRight','right에 추가',`${x}를 right의 끝에 추가했습니다.`);}
+     }
+     k=undefined;emit('loop','분류 완료','arr[1:]의 모든 값을 살펴봤습니다.');
+     emit('return','왼쪽부터 재귀 호출',`반환식을 왼쪽부터 계산합니다. quick_sort(left)를 호출합니다.`);
+     leftResult=quick(left);emit('return','왼쪽 결과를 받아 오른쪽 호출',`왼쪽 정렬 결과는 [${leftResult.join(', ')}]. 이제 quick_sort(right)를 호출합니다.`);
+     rightResult=quick(right);output=[...leftResult,pivot,...rightResult];
+     emit('return','정렬 결과 이어 붙이기',`왼쪽 정렬 결과 + [${pivot}] + 오른쪽 정렬 결과를 반환합니다. 원래 left와 right는 그대로입니다.`);
+     stack.pop();return output;
+   }
+   result=quick([...input]);
+ } else if(id==='merge') {
+   function merge(left,right){
+     enter('merge',left,right);let output,i,j;
+     const emit=(tag,title,detail,extra={})=>{
+       const rows=[list('left',left,{compact:true,consumed:range(0,i??0),pointers:i===undefined?{}:{i},compared:extra.compare&&i<left.length?[i]:[]}),list('right',right,{compact:true,consumed:range(0,j??0),pointers:j===undefined?{}:{j},compared:extra.compare&&j<right.length?[j]:[]})];
+       if(output!==undefined)rows.push(list('result',output,{compact:true,sorted:range(0,output.length),changed:extra.added??[]}));
+       snapshot(tag,title,detail,rows,{...(i!==undefined?{i}:{}),...(j!==undefined?{j}:{})});
+     };
+     emit('mdef','두 정렬된 리스트 합치기','merge 함수로 들어왔습니다. left와 right는 각각 이미 정렬되어 있습니다.');
+     output=[];emit('result','결과 리스트 준비','result = []로 시작합니다.');
+     i=0;emit('i','왼쪽 위치 설정','i = 0. 왼쪽 리스트의 첫 값부터 봅니다.');
+     j=0;emit('j','오른쪽 위치 설정','j = 0. 오른쪽 리스트의 첫 값부터 봅니다.');
+     while(true){
+       const yes=i<left.length && j<right.length;
+       emit('while','양쪽에 값이 남아 있나요?',`i = ${i}, j = ${j}. ${yes?'두 리스트 모두 값이 남아 있습니다.':'한쪽 리스트를 모두 읽었습니다. 반복을 멈춥니다.'}`,{compare:yes});
+       if(!yes)break;
+       comparisons++;const takeLeft=left[i]<=right[j];
+       emit('compare','양쪽의 현재 값 비교',`${left[i]} <= ${right[j]} → ${takeLeft?'참. 왼쪽 값을 먼저 가져옵니다.':'거짓. 오른쪽 값을 가져옵니다.'}`,{compare:true});
+       if(takeLeft){output.push(left[i]);emit('appendLeft','왼쪽 값을 결과에 추가',`${left[i]}를 result에 추가했습니다. i는 아직 ${i}입니다.`,{added:[output.length-1]});i++;emit('incI','왼쪽 위치 이동',`i = ${i}. 왼쪽의 다음 값을 가리킵니다.`);}
+       else {emit('else','오른쪽 값 선택','오른쪽 값이 더 작습니다.');output.push(right[j]);emit('appendRight','오른쪽 값을 결과에 추가',`${right[j]}를 result에 추가했습니다. j는 아직 ${j}입니다.`,{added:[output.length-1]});j++;emit('incJ','오른쪽 위치 이동',`j = ${j}. 오른쪽의 다음 값을 가리킵니다.`);}
+     }
+     const lrest=left.slice(i);output.push(...lrest);emit('restLeft','왼쪽에 남은 값 붙이기',`left[${i}:] = [${lrest.join(', ')}]를 붙입니다. ${lrest.length?'남은 값은 이미 정렬되어 있습니다.':'왼쪽에는 남은 값이 없습니다.'}`);
+     const rrest=right.slice(j);output.push(...rrest);emit('restRight','오른쪽에 남은 값 붙이기',`right[${j}:] = [${rrest.join(', ')}]를 붙입니다. ${rrest.length?'남은 값은 이미 정렬되어 있습니다.':'오른쪽에는 남은 값이 없습니다.'}`);
+     emit('mreturn','합쳐진 리스트 반환',`result = [${output.join(', ')}]를 merge_sort로 돌려줍니다.`);stack.pop();return output;
+   }
+   function sort(arr){
+     enter('merge_sort',arr);let mid,left,right,output;
+     const emit=(tag,title,detail)=>{
+       const rows=[list('arr',arr,{compact:true,split:mid})];
+       if(mid!==undefined && left===undefined)rows.push(list('arr[:mid]',arr.slice(0,mid),{compact:true}));
+       if(mid!==undefined && right===undefined)rows.push(list('arr[mid:]',arr.slice(mid),{compact:true}));
+       if(left!==undefined)rows.push(list('left',left,{compact:true,sorted:range(0,left.length)}));
+       if(right!==undefined)rows.push(list('right',right,{compact:true,sorted:range(0,right.length)}));
+       if(output!==undefined)rows.push(list('반환값',output,{compact:true,sorted:range(0,output.length)}));
+       snapshot(tag,title,detail,rows,mid===undefined?{}:{mid});
+     };
+     emit('def','병합 정렬 호출',`현재 호출의 arr = [${arr.join(', ')}].`);
+     emit('base','멈추는 조건 확인',`len(arr) = ${arr.length}. ${arr.length} <= 1 → ${arr.length<=1?'참':'거짓'}.`);
+     if(arr.length<=1){output=arr;emit('baseReturn','더 나눌 필요가 없습니다','원소가 0개 또는 1개이므로 그대로 반환합니다.');stack.pop();return [...arr];}
+     mid=Math.floor(arr.length/2);emit('mid','가운데 위치 계산',`mid = ${arr.length} // 2 = ${mid}. 인덱스 ${mid}부터 오른쪽 절반입니다.`);
+     emit('left','왼쪽 절반 재귀 호출',`arr[:${mid}] = [${arr.slice(0,mid).join(', ')}]를 정렬하러 들어갑니다.`);
+     left=sort(arr.slice(0,mid));emit('left','왼쪽 정렬 결과 저장',`반환받은 [${left.join(', ')}]를 left에 저장했습니다.`);
+     emit('right','오른쪽 절반 재귀 호출',`arr[${mid}:] = [${arr.slice(mid).join(', ')}]를 정렬하러 들어갑니다.`);
+     right=sort(arr.slice(mid));emit('right','오른쪽 정렬 결과 저장',`반환받은 [${right.join(', ')}]를 right에 저장했습니다.`);
+     emit('return','merge로 합치기','정렬된 left와 right를 merge 함수에 전달합니다.');
+     output=merge(left,right);emit('return','합친 결과 반환',`merge가 돌려준 [${output.join(', ')}]를 반환합니다.`);stack.pop();return output;
+   }
+   result=sort([...input]);
+ } else throw new Error('Unknown algorithm');
+ snapshot('print','정렬 완료',`출력: [${result.join(', ')}]${['quick','merge'].includes(id)?' · 새 정렬 리스트를 반환했습니다.':' · 입력 리스트의 순서를 바꿨습니다.'}`,[list('정렬 결과',result,{sorted:range(0,result.length)})],{}, {done:true,result});
+ return {events,code,result,footprints:buildFootprints(id,events)};
+}
+function formatCall(frame){return `${frame.fn}(${frame.args.map(values=>`[${values.join(', ')}]`).join(', ')})`;}
+function footprintDiagram(id,event,kind,previous){
+ const values=name=>event.rows.find(row=>row.name===name)?.values;
+ const group=(label,items,tone='',extra={})=>({label,values:[...items],tone,...extra});
+ const row=(name,label=name,tone='')=>group(label,values(name),tone);
+ const result=name=>({groups:[row(name,'반환할 배열','sorted')]});
+ if(event.done)return {groups:[row('정렬 결과','최종 정렬 결과','sorted')]};
+ if(kind==='call')return {groups:event.tag==='mdef'?[row('left','left · 정렬됨','sorted'),row('right','right · 정렬됨','sorted')]:[row('arr','입력 arr')]};
+ if(event.tag==='baseReturn')return result('반환값');
+ if(id==='quick'){
+   if(kind==='pivot')return {groups:[group('arr · 첫 칸이 pivot',values('arr'),'',{pivot:[0]})]};
+   const leftResult=values('quick_sort(left)'),rightResult=values('quick_sort(right)');
+   const groups=[
+     group(leftResult?'왼쪽 정렬 결과':'left · pivot보다 작음',leftResult??values('left'),leftResult?'sorted':'left'),
+     group('pivot · 기준값',[event.vars.pivot],'pivot'),
+     group(rightResult?'오른쪽 정렬 결과':'right · pivot 이상',rightResult??values('right'),rightResult?'sorted':'right')
+   ];
+   return {groups,...(kind==='return'?{connector:'이어 붙이기',output:[row('반환값','반환할 배열','sorted')]}:{})};
+ }
+ if(kind==='split')return {groups:[row('arr','입력 arr')],connector:'반으로 나누기',output:[row('arr[:mid]','왼쪽 절반','left'),row('arr[mid:]','오른쪽 절반','right')]};
+ if(kind==='receive')return {groups:[row('left','left · 정렬됨','sorted'),values('right')?row('right','right · 정렬됨','sorted'):row('arr[mid:]','오른쪽 절반 · 정렬 대기','right')]};
+ if(kind==='merge'){
+   const output=values('result'),before=previous.rows.find(row=>row.name==='result')?.values??[];
+   const added=output.slice(before.length),changed=added.map((_,index)=>before.length+index);
+   return {groups:[group(`${event.tag.endsWith('Left')?'left':'right'}에서 가져온 값`,added,'added')],connector:'result에 붙이기',output:[group('result · 지금까지 합친 배열',output,'sorted',{changed})]};
+ }
+ if(event.tag==='mreturn')return {groups:[row('left','left · 정렬됨','sorted'),row('right','right · 정렬됨','sorted')],connector:'병합 완료',output:[row('result','반환할 배열','sorted')]};
+ return result('반환값');
+}
+function buildFootprints(id,events){
+ if(!['quick','merge'].includes(id))return [];
+ const footprints=[],array=values=>`[${values.join(', ')}]`;
+ events.forEach((event,index)=>{
+   const frame=event.stack.at(-1),parent=event.stack.at(-2);
+   const values=name=>event.rows.find(row=>row.name===name)?.values;
+   let kind,label,summary,result;
+   if(event.done){kind='done';label='완료';summary=`최종 결과 ${array(event.result)}`;result=event.result;}
+   else if(event.tag==='def'||event.tag==='mdef'){
+     kind='call';label=event.tag==='mdef'?'병합 시작':'호출';summary=event.tag==='mdef'?'정렬된 두 리스트에서 작은 값을 차례로 가져옵니다.':parent?'이 부분 배열을 정렬하러 들어왔습니다.':'전체 배열의 정렬을 시작합니다.';
+   } else if(event.tag==='baseReturn'){
+     kind='return';label='그대로 반환';result=values('반환값');summary=`원소가 ${result.length}개이므로 ${array(result)}를 그대로 돌려줍니다.`;
+   } else if(id==='quick'){
+     if(event.tag==='pivot'){kind='pivot';label='기준 선택';summary=`첫 값 ${event.vars.pivot}를 pivot으로 선택합니다.`;}
+     else if(event.tag==='loop' && event.rows[0].pointers?.x===undefined){
+       kind='split';label='분할 완료';summary=`left ${array(values('left'))} ← pivot [${event.vars.pivot}] → right ${array(values('right'))}`;
+     } else if(event.tag==='return' && values('반환값')!==undefined){
+       kind='return';label='합쳐 반환';result=values('반환값');summary=`${array(values('quick_sort(left)'))} + [${event.vars.pivot}] + ${array(values('quick_sort(right)'))} → ${array(result)}`;
+     } else if(event.tag==='return' && values('quick_sort(left)')!==undefined){
+       kind='receive';label='왼쪽 결과 받음';summary=`${array(values('quick_sort(left)'))}를 받았습니다. 이제 오른쪽 ${array(values('right'))}를 정렬합니다.`;
+     }
+   } else if(id==='merge'){
+     if(event.tag==='mid'){kind='split';label='반으로 나누기';summary=`${array(values('arr'))} → 왼쪽 ${array(values('arr[:mid]'))} / 오른쪽 ${array(values('arr[mid:]'))}`;}
+     else if(['left','right'].includes(event.tag) && values(event.tag)!==undefined){
+       kind='receive';label=event.tag==='left'?'왼쪽 결과 받음':'오른쪽 결과 받음';summary=`정렬된 ${array(values(event.tag))}를 ${event.tag}에 저장합니다.`;
+     } else if(['appendLeft','appendRight','restLeft','restRight'].includes(event.tag)){
+       const output=values('result'),previous=events[index-1].rows.find(row=>row.name==='result')?.values??[],added=output.slice(previous.length);
+       if(added.length){kind='merge';label='결과에 붙이기';summary=`${event.tag.endsWith('Left')?'왼쪽':'오른쪽'}에서 ${array(added)} 추가 → result ${array(output)}`;}
+     } else if(event.tag==='mreturn'||event.tag==='return'&&values('반환값')!==undefined){
+       kind='return';label=event.tag==='mreturn'?'병합 결과 반환':'정렬 결과 반환';result=values(event.tag==='mreturn'?'result':'반환값');summary=`정렬된 ${array(result)}를 돌려줍니다.`;
+     }
+   }
+   if(kind)footprints.push({step:index,line:event.line,kind,label,summary,result,diagram:footprintDiagram(id,event,kind,events[index-1]),frameId:frame?.id??null,call:frame?formatCall(frame):'print',parent:parent?formatCall(parent):'',level:Math.max(0,event.stack.length-1)});
+ });
+ return footprints;
+}
+if(typeof module!=='undefined') module.exports={DEFAULT_DATA,ALGORITHMS,SOURCES,sourceFor,parseData,buildTrace,buildFootprints,formatCall};
+
+'use strict';
+const $=id=>document.getElementById(id);
+let currentAlgorithm='bubble', data=[...DEFAULT_DATA], trace, step=0, timer=null, previousFrame=null, lastFootprintStep=null;
+const escapeHTML=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function colorCode(line){
+ const re=/#.*$|\b(?:def|return|for|in|range|if|elif|else|while|and)\b|\b(?:len|print|bubble_sort|selection_sort|insertion_sort|quick_sort|merge_sort|merge|append)\b|\b\d+\b/g;
+ let html='',at=0;
+ for(const match of line.matchAll(re)){
+   html+=escapeHTML(line.slice(at,match.index));const t=match[0];
+   const cls=t.startsWith('#')?'comment':/^\d+$/.test(t)?'num-token':/^(len|print|.*sort|merge|append)$/.test(t)?'fn':'kw';
+   html+=`<span class="${cls}">${escapeHTML(t)}</span>`;at=match.index+t.length;
+ }
+ return html+escapeHTML(line.slice(at));
+}
+function pause(){if(timer!==null)clearTimeout(timer);timer=null;$('play').textContent=step===trace.events.length-1?'↺ 다시 재생':'▶ 자동 재생';$('play').setAttribute('aria-label','자동 재생');}
+function schedule(){timer=setTimeout(()=>{if(step<trace.events.length-1){step++;render();}if(step>=trace.events.length-1)pause();else schedule();},Number($('speed').value));}
+function togglePlay(){if(timer!==null){pause();return;}if(step===trace.events.length-1)step=0;$('play').textContent='Ⅱ 일시 정지';$('play').setAttribute('aria-label','일시 정지');render();schedule();}
+function goTo(value){pause();step=Math.max(0,Math.min(trace.events.length-1,value));render();pause();}
+function start(id=currentAlgorithm,values=data){
+ if(timer!==null)clearTimeout(timer);timer=null;currentAlgorithm=id;data=[...values];step=0;trace=buildTrace(id,data);
+ const meta=ALGORITHMS[id];$('algorithm-name').textContent=meta.name;$('algorithm-summary').textContent=meta.summary;$('algorithm-cost').textContent=meta.cost;$('algorithm-memory').textContent=meta.memory;$('filename').textContent=`${id}_sort.py`;
+ document.querySelectorAll('[data-algorithm]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.algorithm===id)));
+ $('minimum-legend').hidden=id!=='selection';
+ $('code-lines').innerHTML=trace.code.map(([,line],index)=>`<div class="code-line" id="line-${index+1}" data-line="${index+1}"><span class="line-no" aria-hidden="true">${index+1}</span><code class="line-text">${colorCode(line)||' '}</code></div>`).join('');
+ $('step-range').max=trace.events.length-1;$('diagram-scroll').scrollTop=0;previousFrame=null;prepareFootprints();render();pause();
+}
+function rowHTML(row){
+ const low=Math.min(...data),high=Math.max(...data);const pointers=row.pointers||{};
+ const linear=['bubble','selection','insertion'].includes(currentAlgorithm);
+ const items=row.values.map((value,index)=>{
+   const classes=['item',...(row.sorted?.includes(index)?['sorted']:[]),...(row.focus?.includes(index)?['focus']:[]),...(row.compared?.includes(index)?['compared']:[]),...(row.changed?.includes(index)?['changed']:[]),...(row.consumed?.includes(index)?['consumed']:[]),...(row.split===index?['split']:[])];
+   // The color rules prioritize the operation over the sorted background.
+   const operation=row.changed?.includes(index)?'changed':row.compared?.includes(index)?'compared':row.focus?.includes(index)?'focus':'';
+   if(operation){const sortedIndex=classes.indexOf('sorted');if(sortedIndex>=0)classes.splice(sortedIndex,1);}
+   const pointerNames=Object.entries(pointers).filter(([,v])=>v===index).map(([name])=>name);
+   const names=pointerNames.join('·');
+   if(pointers.min_idx===index)classes.push('min-candidate');
+   const pointerHTML=pointerNames.filter(name=>!linear||!['i','j'].includes(name)).map(name=>`<span${name==='min_idx'?' class="min-label"':''}>${escapeHTML(name)}</span>`).join('·');
+   const belowHTML=linear?pointerNames.filter(name=>['i','j'].includes(name)).map(escapeHTML).join(' · '):'';
+   const height=high===low?75:30+((value-low)/(high-low))*70;
+   const title=`${row.name}[${index}] = ${value}${names?` · ${names}`:''}`;
+   return `<div class="${classes.join(' ')}" title="${escapeHTML(title)}"><span class="pointer pointer-top">${pointerHTML}</span><div class="bar-shell"><div class="bar" style="height:${height}%">${value}</div></div><span class="idx">${index}</span>${linear?`<span class="pointer pointer-bottom">${belowHTML}</span>`:''}</div>`;
+ }).join('');
+ const after=Object.entries(pointers).filter(([,v])=>v>=row.values.length).map(([name,v])=>`${name} = ${v} (끝)`).join(' · ');
+ return `<section class="array-row ${row.compact?'compact':''} ${linear?'linear-row':''}" aria-label="${escapeHTML(row.name)}"><div class="row-heading"><span class="row-name">${escapeHTML(row.name)}</span><span class="row-note">${row.split!==undefined?`mid = ${row.split}에서 나눔`:row.values.length+'개 · 아래는 인덱스'}</span></div><div class="array-items ${row.values.length>10?'dense':''}" aria-label="${escapeHTML(row.name)}: [${row.values.join(', ')}]">${items||'<span class="empty-array">[ ] 빈 리스트</span>'}</div>${after?`<div class="end-pointer">${escapeHTML(after)}</div>`:''}</section>`;
+}
+function footprintDiagramHTML(diagram){
+ const groupsHTML=groups=>groups.map(group=>{
+   const cells=group.values.map((value,index)=>{
+     const state=group.changed?.includes(index)?'added':group.pivot?.includes(index)?'pivot':group.tone;
+     const description=state==='added'?' · 새로 붙인 값':state==='pivot'?' · pivot 기준값':'';
+     return `<span class="trail-cell ${state}" title="${escapeHTML(`${group.label}[${index}] = ${value}${description}`)}">${value}</span>`;
+   }).join('');
+   return `<span class="trail-group"><span class="trail-label">${escapeHTML(group.label)}</span><span class="trail-cells" role="img" aria-label="${escapeHTML(`${group.label}: [${group.values.join(', ')}]`)}">${cells||'<span class="trail-empty">[ ] 빈 배열</span>'}</span></span>`;
+ }).join('');
+ return `<span class="footprint-picture"><span class="trail-groups">${groupsHTML(diagram.groups)}</span>${diagram.output?`<span class="trail-connector"><span aria-hidden="true">↓</span> ${escapeHTML(diagram.connector)}</span><span class="trail-groups">${groupsHTML(diagram.output)}</span>`:''}</span>`;
+}
+function prepareFootprints(){
+ const available=trace.footprints.length>0;$('footprints').hidden=!available;$('show-footprints').hidden=!available;
+ $('footprint-all').checked=false;lastFootprintStep=null;$('footprint-scroll').scrollTop=0;
+ $('footprint-list').innerHTML=trace.footprints.map((entry,index)=>`<li class="footprint-entry" style="--nest:${Math.min(entry.level,4)}" data-step="${entry.step}"><button type="button" data-footprint-step="${entry.step}" aria-label="발자취 ${index+1}: ${escapeHTML(entry.label)}. ${entry.step+1}단계로 이동"><span class="footprint-number">${String(index+1).padStart(2,'0')}</span><span class="footprint-content"><span class="footprint-heading"><span class="footprint-kind ${entry.kind}">${escapeHTML(entry.label)}</span><code>${escapeHTML(entry.call)}</code></span><span class="footprint-summary">${escapeHTML(entry.summary)}</span>${footprintDiagramHTML(entry.diagram)}${entry.kind==='return'?`<span class="footprint-parent">돌아갈 곳: ${escapeHTML(entry.parent||'최상위 호출 · 결과 출력')}</span>`:''}</span><span class="footprint-step">${entry.step+1}단계 <span aria-hidden="true">↗</span></span></button></li>`).join('');
+}
+function renderFootprints(){
+ if(!trace.footprints.length)return;
+ const showAll=$('footprint-all').checked,reached=trace.footprints.filter(entry=>entry.step<=step),current=reached.at(-1)?.step;
+ $('footprint-count').textContent=`${reached.length} / ${trace.footprints.length}개 기록`;
+ $('footprint-empty').hidden=showAll||reached.length>0;
+ for(const item of $('footprint-list').children){
+   const itemStep=Number(item.dataset.step),future=itemStep>step,active=itemStep===current;
+   item.hidden=!showAll&&future;item.classList.toggle('future',future);item.classList.toggle('current',active);
+   if(active)item.firstElementChild.setAttribute('aria-current','step');else item.firstElementChild.removeAttribute('aria-current');
+ }
+ if(current!==lastFootprintStep){
+   const active=$('footprint-list').querySelector('.current');
+   if(active){const list=$('footprint-scroll'),rect=active.getBoundingClientRect(),view=list.getBoundingClientRect();if(rect.bottom>view.bottom||rect.top<view.top)list.scrollTop+=rect.top-view.top-12;}
+   lastFootprintStep=current;
+ }
+}
+function render(){
+ const event=trace.events[step];$('stage-title').textContent=event.title;$('stage-detail').textContent=event.detail;$('stage-line').textContent=`${event.line}번 줄`;$('code-line-label').textContent=`LINE ${String(event.line).padStart(2,'0')}`;$('mobile-code').textContent=trace.code[event.line-1][1].trim();
+ $('comparison-count').textContent=`값 비교 ${event.comparisons}회${['bubble','selection','insertion'].includes(currentAlgorithm)?` · 교환 ${event.swaps}회`:''}`;
+ const recursive=['quick','merge'].includes(currentAlgorithm);
+ document.querySelector('.workspace').classList.toggle('recursive-mode',recursive);
+ $('callstack').innerHTML=recursive&&event.stack.length?'<span class="call-label">호출 경로</span>'+event.stack.map((frame,index)=>{
+   const call=formatCall(frame);
+   return `${index?'<span class="frame-arrow">›</span>':''}<span class="frame ${index===event.stack.length-1?'current':''}" title="${index===event.stack.length-1?'현재 실행 중인 호출':'상위 호출'}">${escapeHTML(call)}</span>`;
+ }).join(''):'';
+ $('variables').innerHTML=Object.entries(event.vars).length?Object.entries(event.vars).map(([name,value])=>`<span class="variable${name==='min_idx'?' minimum-variable':''}">${escapeHTML(name)} = <b>${escapeHTML(value)}</b></span>`).join(''):'<span class="variable-empty">'+(event.done?'모든 실행을 마쳤습니다.':'변수가 정해지면 여기에 표시됩니다.')+'</span>';
+ $('arrays').innerHTML=event.rows.map(rowHTML).join('');
+ const diagram=$('diagram-scroll'),frameId=event.stack.at(-1)?.id??0;
+ if(frameId!==previousFrame){diagram.scrollTop=0;$('callstack').scrollTop=$('callstack').scrollHeight;}
+ previousFrame=frameId;
+ const activeRow=event.rows.findIndex(row=>row.changed?.length||row.name==='반환값');
+ if(activeRow>=0){const rowRect=$('arrays').children[activeRow].getBoundingClientRect(),diagramRect=diagram.getBoundingClientRect();if(rowRect.bottom>diagramRect.bottom)diagram.scrollTop+=rowRect.bottom-diagramRect.bottom+8;else if(rowRect.top<diagramRect.top)diagram.scrollTop-=diagramRect.top-rowRect.top+8;}
+ document.querySelector('.visual-panel').classList.toggle('completed',!!event.done);
+ document.querySelectorAll('.code-line.active').forEach(line=>{line.classList.remove('active');line.removeAttribute('aria-current');});
+ const active=$(`line-${event.line}`);active.classList.add('active');active.setAttribute('aria-current','step');
+ const scroller=$('code-scroll'),rect=active.getBoundingClientRect(),view=scroller.getBoundingClientRect();
+ if(rect.top<view.top+12||rect.bottom>view.bottom-12)scroller.scrollTop+=rect.top-view.top-scroller.clientHeight*.3;
+ $('step-range').value=step;$('step-range').setAttribute('aria-valuetext',`${step+1} / ${trace.events.length}단계: ${event.title}`);$('step-counter').textContent=`${step+1} / ${trace.events.length}`;$('previous').disabled=step===0;$('next').disabled=!!event.done;$('reset').disabled=step===0;
+ renderFootprints();
+ if(timer===null||event.done)$('announcement').textContent=`${step+1}단계. ${event.title}. ${event.line}번 줄. ${event.detail}`;
+}
+function applyValues(values){$('data-input').value=values.join(', ');$('random-count').value=values.length;$('input-error').textContent='';$('data-input').removeAttribute('aria-invalid');$('random-count').removeAttribute('aria-invalid');start(currentAlgorithm,values);}
+document.querySelectorAll('[data-algorithm]').forEach(button=>button.addEventListener('click',()=>start(button.dataset.algorithm)));
+$('data-form').addEventListener('submit',event=>{event.preventDefault();try{applyValues(parseData($('data-input').value));}catch(error){pause();$('input-error').textContent=error.message;$('data-input').setAttribute('aria-invalid','true');$('data-input').focus();}});
+$('default-data').addEventListener('click',()=>applyValues(DEFAULT_DATA));
+function randomize(){
+ const count=Number($('random-count').value);
+ if(!Number.isInteger(count)||count<1||count>16){pause();$('input-error').textContent='무작위 데이터 개수를 1~16 사이의 정수로 설정해 주세요.';$('random-count').setAttribute('aria-invalid','true');$('random-count').focus();return;}
+ applyValues(Array.from({length:count},()=>Math.floor(Math.random()*20)+1));
+}
+$('random-data').addEventListener('click',randomize);
+$('random-count').addEventListener('keydown',event=>{if(event.key==='Enter'){event.preventDefault();randomize();}});
+$('reverse-data').addEventListener('click',()=>applyValues([...data].sort((a,b)=>b-a)));
+$('previous').addEventListener('click',()=>goTo(step-1));$('next').addEventListener('click',()=>goTo(step+1));$('reset').addEventListener('click',()=>goTo(0));$('play').addEventListener('click',togglePlay);
+$('step-range').addEventListener('input',event=>goTo(Number(event.target.value)));
+$('speed').addEventListener('change',()=>{if(timer!==null){clearTimeout(timer);schedule();}});
+$('footprint-all').addEventListener('change',()=>{lastFootprintStep=null;renderFootprints();});
+$('show-footprints').addEventListener('click',()=>{$('footprints').scrollIntoView({block:'start'});$('footprints-title').focus({preventScroll:true});});
+$('footprint-list').addEventListener('click',event=>{const button=event.target.closest('[data-footprint-step]');if(button){goTo(Number(button.dataset.footprintStep));document.querySelector('.workspace').scrollIntoView({block:'start'});$('code-scroll').focus({preventScroll:true});}});
+document.addEventListener('keydown',event=>{if(event.target.closest('input,select,textarea,button,[contenteditable=true]'))return;if(event.key==='ArrowRight'){event.preventDefault();goTo(step+1);}else if(event.key==='ArrowLeft'){event.preventDefault();goTo(step-1);}else if(event.code==='Space'){event.preventDefault();togglePlay();}});
+document.addEventListener('visibilitychange',()=>{if(document.hidden)pause();});
+start();
+
+</script>
+</body>
+</html>
